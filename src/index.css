@@ -1,0 +1,146 @@
+@import "tailwindcss";
+
+@layer base {
+  :root {
+    --color-gold-light: #FFF8DC;
+    --color-gold-primary: #D4AF37;
+    --color-gold-secondary: #E6CA65;
+    --color-gold-dark: #996515;
+    --color-bg-primary: #050507;
+    --color-bg-secondary: #0B0B10;
+  }
+
+  html {
+    scroll-behavior: smooth;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    transition: background-color 0.5s ease, color 0.5s ease;
+  }
+
+  /* Night Mode Base */
+  html:not(.day-mode) {
+    background-color: #050507;
+    color: #EDE8D0;
+  }
+
+  /* Day Mode Base (Luxury Ivory & Champagne) */
+  html.day-mode {
+    background-color: #F8F6F0;
+    color: #1A1A1E;
+  }
+
+  body {
+    overflow-x: hidden;
+    min-height: 100vh;
+    transition: background-color 0.5s ease, color 0.5s ease;
+  }
+
+  /* Custom Typography rules */
+  [dir="rtl"] {
+    font-family: 'Cairo', 'Tajawal', sans-serif;
+  }
+  [dir="rtl"] h1, [dir="rtl"] h2, [dir="rtl"] h3 {
+    font-family: 'IBM Plex Sans Arabic', 'Cairo', sans-serif;
+  }
+
+  [dir="ltr"] {
+    font-family: 'Inter', sans-serif;
+  }
+  [dir="ltr"] h1, [dir="ltr"] h2, [dir="ltr"] h3 {
+    font-family: 'Syne', 'Cinzel', sans-serif;
+  }
+}
+
+/* 4-Bar Sound Equalizer Animation */
+@keyframes soundWave {
+  0%, 100% {
+    height: 3px;
+  }
+  50% {
+    height: 14px;
+  }
+}
+
+/* Subtle Shimmer Animation */
+@keyframes shimmerGlint {
+  0% {
+    transform: translateX(-100%) rotate(45deg);
+  }
+  100% {
+    transform: translateX(200%) rotate(45deg);
+  }
+}
+
+/* Ambient Floating Keyframes */
+@keyframes ambientDrift {
+  0% {
+    transform: translate(0px, 0px) scale(1);
+  }
+  50% {
+    transform: translate(35px, -45px) scale(1.15);
+  }
+  100% {
+    transform: translate(-30px, 40px) scale(0.9);
+  }
+}
+
+@keyframes ambientFloatSlow {
+  0% {
+    transform: translate(0px, 0px) scale(1);
+  }
+  50% {
+    transform: translate(60px, 80px) scale(1.08);
+  }
+  100% {
+    transform: translate(-50px, -60px) scale(0.95);
+  }
+}
+
+@keyframes ambientFloatReverse {
+  0% {
+    transform: translate(0px, 0px) scale(1);
+  }
+  50% {
+    transform: translate(-70px, -60px) scale(1.12);
+  }
+  100% {
+    transform: translate(50px, 70px) scale(0.92);
+  }
+}
+
+.animate-ambient-float-slow {
+  animation: ambientFloatSlow 24s ease-in-out infinite alternate;
+}
+
+.animate-ambient-float-reverse {
+  animation: ambientFloatReverse 28s ease-in-out infinite alternate;
+}
+
+/* 35mm Analog Cinema Film Grain */
+.cinema-grain-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  pointer-events: none;
+  z-index: 9990;
+  opacity: 0.035;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+}
+
+/* Luxury Custom Dark Scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(212, 175, 55, 0.3);
+  border-radius: 9999px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(212, 175, 55, 0.6);
+}

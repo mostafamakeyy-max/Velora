@@ -1,0 +1,134 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 800" width="100%" height="100%">
+  <defs>
+    <radialGradient id="latteBg" cx="50%" cy="50%" r="70%">
+      <stop offset="0%" stop-color="#2c1a11"/>
+      <stop offset="55%" stop-color="#140d09"/>
+      <stop offset="100%" stop-color="#070504"/>
+    </radialGradient>
+
+    <!-- Warm Golden Ambient Lamp -->
+    <radialGradient id="amberLamp" cx="50%" cy="48%" r="45%">
+      <stop offset="0%" stop-color="#e6ca65" stop-opacity="0.3"/>
+      <stop offset="60%" stop-color="#d4af37" stop-opacity="0.08"/>
+      <stop offset="100%" stop-color="#140d09" stop-opacity="0"/>
+    </radialGradient>
+
+    <!-- Coffee Crema Base -->
+    <radialGradient id="cremaBase" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#edd5ab"/>
+      <stop offset="55%" stop-color="#b8782a"/>
+      <stop offset="85%" stop-color="#7a4213"/>
+      <stop offset="100%" stop-color="#3d1d07"/>
+    </radialGradient>
+
+    <!-- Silky Microfoam White -->
+    <linearGradient id="foamWhite" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#ffffff"/>
+      <stop offset="100%" stop-color="#fdf6e6"/>
+    </linearGradient>
+
+    <!-- Glossy Chocolate Drizzle -->
+    <linearGradient id="chocoDrizzle" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#4a220d"/>
+      <stop offset="40%" stop-color="#2a1005"/>
+      <stop offset="80%" stop-color="#150802"/>
+      <stop offset="100%" stop-color="#3b1708"/>
+    </linearGradient>
+
+    <filter id="shadowLatte" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="25" stdDeviation="30" flood-color="#000000" flood-opacity="0.95"/>
+    </filter>
+
+    <filter id="chocoShine">
+      <feGaussianBlur stdDeviation="2" result="blur"/>
+      <feMerge>
+        <feMergeNode in="blur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+
+  <!-- Canvas Background -->
+  <rect width="1200" height="800" fill="url(#latteBg)"/>
+
+  <!-- Warm Glow Circle -->
+  <circle cx="600" cy="400" r="380" fill="url(#amberLamp)"/>
+
+  <!-- Table Drop Shadow -->
+  <ellipse cx="600" cy="450" rx="320" ry="240" fill="#000000" opacity="0.9" filter="url(#shadowLatte)"/>
+
+  <!-- Matte Black Ceramic Cup (Top-Down / 60 Degree Angle) -->
+  <g filter="url(#shadowLatte)">
+    <!-- Outer Cup Rim -->
+    <circle cx="600" cy="400" r="235" fill="#181514" stroke="#d4af37" stroke-opacity="0.45" stroke-width="3.5"/>
+    <!-- Inner Rim Wall -->
+    <circle cx="600" cy="400" r="215" fill="#25211e" stroke="#d4af37" stroke-opacity="0.2" stroke-width="1.5"/>
+
+    <!-- Crema Liquid Surface -->
+    <circle cx="600" cy="400" r="200" fill="url(#cremaBase)"/>
+
+    <!-- ARTISAN LATTE ART: Rosetta / Multi-Tier Tulip Pattern -->
+    <g fill="url(#foamWhite)">
+      <!-- Top Heart -->
+      <path d="M 600,260 C 580,230 550,245 565,275 Q 600,310 600,320 Q 600,310 635,275 C 650,245 620,230 600,260 Z"/>
+      
+      <!-- Tier 1 Heart -->
+      <path d="M 600,295 C 570,270 535,290 555,320 Q 600,355 600,365 Q 600,355 645,320 C 665,290 630,270 600,295 Z"/>
+
+      <!-- Tier 2 Heart -->
+      <path d="M 600,335 C 560,310 520,330 545,365 Q 600,405 600,415 Q 600,405 655,365 C 680,330 640,310 600,335 Z"/>
+
+      <!-- Tier 3 Heart -->
+      <path d="M 600,380 C 550,350 505,375 535,415 Q 600,460 600,470 Q 600,460 665,415 C 695,375 650,350 600,380 Z"/>
+
+      <!-- Base Flourish -->
+      <path d="M 600,430 C 540,400 490,430 525,475 Q 600,525 600,535 Q 600,525 675,475 C 710,430 660,400 600,430 Z"/>
+
+      <!-- Central Stem Line Cut -->
+      <line x1="600" y1="240" x2="600" y2="550" stroke="#8a4816" stroke-width="3" stroke-linecap="round"/>
+    </g>
+
+    <!-- RICH ARTISAN CHOCOLATE DRIZZLE (Spirals and Delicate Cross-hatching) -->
+    <g stroke="url(#chocoDrizzle)" stroke-width="5" fill="none" stroke-linecap="round" filter="url(#chocoShine)">
+      <!-- Spiral Arc 1 -->
+      <path d="M 440,360 C 470,290 550,260 620,270 C 700,280 750,350 740,420 C 730,490 660,540 590,535 C 520,530 465,470 475,400"/>
+      <!-- Chocolate Cross Accent Lines -->
+      <path d="M 460,320 Q 600,350 740,320"/>
+      <path d="M 450,440 Q 600,420 750,450"/>
+      <path d="M 490,260 Q 600,300 710,260"/>
+    </g>
+
+    <!-- Chocolate Pearls / Drizzle Dots -->
+    <g fill="#240c03" stroke="#e6ca65" stroke-width="0.75" filter="url(#chocoShine)">
+      <circle cx="480" cy="275" r="4.5"/>
+      <circle cx="720" cy="285" r="5"/>
+      <circle cx="445" cy="410" r="4"/>
+      <circle cx="755" cy="390" r="4.5"/>
+      <circle cx="510" cy="510" r="5"/>
+      <circle cx="690" cy="505" r="4"/>
+    </g>
+  </g>
+
+  <!-- Roasted Beans around Cup -->
+  <g fill="#2d170a" stroke="#d4af37" stroke-opacity="0.3" stroke-width="1" filter="url(#shadowLatte)">
+    <g transform="translate(260, 480) rotate(-35)"><ellipse cx="0" cy="0" rx="18" ry="12"/><path d="M -14,0 Q 0,3 14,0" stroke="#000" stroke-width="2" fill="none"/></g>
+    <g transform="translate(300, 520) rotate(25)"><ellipse cx="0" cy="0" rx="16" ry="11"/><path d="M -12,0 Q 0,2 12,0" stroke="#000" stroke-width="2" fill="none"/></g>
+    <g transform="translate(900, 460) rotate(45)"><ellipse cx="0" cy="0" rx="19" ry="13"/><path d="M -15,0 Q 0,3 15,0" stroke="#000" stroke-width="2" fill="none"/></g>
+    <g transform="translate(940, 500) rotate(-20)"><ellipse cx="0" cy="0" rx="17" ry="11"/><path d="M -13,0 Q 0,2 13,0" stroke="#000" stroke-width="2" fill="none"/></g>
+  </g>
+
+  <!-- Typography & Watermark -->
+  <g font-family="system-ui, -apple-system, sans-serif">
+    <!-- Top Left File Tag -->
+    <rect x="50" y="50" width="350" height="34" rx="17" fill="#050507" fill-opacity="0.85" stroke="#d4af37" stroke-width="1.5"/>
+    <circle cx="70" cy="67" r="5" fill="#d4af37"/>
+    <text x="86" y="72" fill="#fff8dc" font-size="12" font-weight="700" letter-spacing="0.5">Latte_art_and_chocolate_drizzle</text>
+
+    <!-- Top Right Session Badge -->
+    <text x="1150" y="72" fill="#d4af37" font-size="14" font-weight="800" text-anchor="end" letter-spacing="2">MAZAJ AL QAHWA // LATTE ART</text>
+
+    <!-- Bottom Caption -->
+    <text x="50" y="730" fill="#ffffff" font-size="20" font-weight="800">جلسة تصوير مزاج القهوة</text>
+    <text x="50" y="755" fill="#d4af37" font-size="13" font-weight="600" letter-spacing="0.5">Precision Artisan Rosetta Latte Art • Rich Chocolate Drizzle</text>
+  </g>
+</svg>

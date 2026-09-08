@@ -1,0 +1,120 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 800" width="100%" height="100%">
+  <defs>
+    <radialGradient id="cupsBg" cx="50%" cy="40%" r="70%">
+      <stop offset="0%" stop-color="#2a1b12"/>
+      <stop offset="50%" stop-color="#140e0a"/>
+      <stop offset="100%" stop-color="#060504"/>
+    </radialGradient>
+
+    <!-- Cup 1: Matte Charcoal Obsidian -->
+    <linearGradient id="cupObsidian" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#2c2a29"/>
+      <stop offset="40%" stop-color="#181615"/>
+      <stop offset="80%" stop-color="#0e0d0c"/>
+      <stop offset="100%" stop-color="#201e1d"/>
+    </linearGradient>
+
+    <!-- Cup 2: Warm Sandstone Terracotta -->
+    <linearGradient id="cupTerracotta" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#b87342"/>
+      <stop offset="35%" stop-color="#8a4b21"/>
+      <stop offset="75%" stop-color="#542c11"/>
+      <stop offset="100%" stop-color="#965427"/>
+    </linearGradient>
+
+    <!-- Cup 3: Warm Ceramic Cream/Gold -->
+    <linearGradient id="cupCream" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#f5ede0"/>
+      <stop offset="40%" stop-color="#dfd0ba"/>
+      <stop offset="80%" stop-color="#bda78a"/>
+      <stop offset="100%" stop-color="#e8dcce"/>
+    </linearGradient>
+
+    <filter id="shadowCups" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="30" stdDeviation="30" flood-color="#000000" flood-opacity="0.95"/>
+    </filter>
+
+    <filter id="glowCups">
+      <feGaussianBlur stdDeviation="10" result="blur"/>
+      <feMerge>
+        <feMergeNode in="blur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+
+  <!-- Background -->
+  <rect width="1200" height="800" fill="url(#cupsBg)"/>
+
+  <!-- Studio Ambient Spotlight -->
+  <ellipse cx="600" cy="400" rx="460" ry="240" fill="#d4af37" opacity="0.1" filter="url(#glowCups)"/>
+
+  <!-- Slate Stone Countertop -->
+  <polygon points="100,600 1100,600 1180,780 20,780" fill="#120e0b" stroke="#d4af37" stroke-opacity="0.25" stroke-width="2"/>
+  <line x1="20" y1="605" x2="1180" y2="605" stroke="#d4af37" stroke-opacity="0.4" stroke-width="1"/>
+
+  <!-- Contact Shadows on Slate -->
+  <ellipse cx="380" cy="610" rx="90" ry="25" fill="#000000" opacity="0.9" filter="url(#shadowCups)"/>
+  <ellipse cx="600" cy="615" rx="100" ry="28" fill="#000000" opacity="0.9" filter="url(#shadowCups)"/>
+  <ellipse cx="820" cy="610" rx="90" ry="25" fill="#000000" opacity="0.9" filter="url(#shadowCups)"/>
+
+  <!-- ================= CUP 1: LEFT (Matte Charcoal Obsidian) ================= -->
+  <g filter="url(#shadowCups)">
+    <!-- Cup Body -->
+    <path d="M 310,320 L 330,590 C 330,605 430,605 430,590 L 450,320 Z" fill="url(#cupObsidian)" stroke="#d4af37" stroke-opacity="0.3" stroke-width="1.5"/>
+    <!-- Silicone Heat Sleeve -->
+    <path d="M 320,400 L 325,490 C 325,502 435,502 435,490 L 440,400 Z" fill="#25211e" stroke="#d4af37" stroke-opacity="0.4" stroke-width="1.5"/>
+    <text x="380" y="455" fill="#d4af37" font-size="11" font-weight="700" text-anchor="middle" font-family="sans-serif" letter-spacing="2">MAZAJ</text>
+    <!-- Lid -->
+    <path d="M 300,320 C 300,305 460,305 460,320 Z" fill="#1c1917" stroke="#d4af37" stroke-opacity="0.5" stroke-width="2"/>
+    <rect x="370" y="295" width="20" height="12" rx="3" fill="#d4af37" opacity="0.8"/>
+  </g>
+
+  <!-- ================= CUP 2: CENTER HERO (Warm Terracotta & Gold Rim) ================= -->
+  <g filter="url(#shadowCups)">
+    <!-- Cup Body (Slightly taller / in focus) -->
+    <path d="M 520,280 L 545,595 C 545,612 655,612 655,595 L 680,280 Z" fill="url(#cupTerracotta)" stroke="#d4af37" stroke-opacity="0.5" stroke-width="2"/>
+    <!-- Silicone Heat Sleeve with Arabic Calligraphy / Logo -->
+    <path d="M 533,375 L 540,480 C 540,494 660,494 660,480 L 667,375 Z" fill="#1e130c" stroke="#d4af37" stroke-opacity="0.6" stroke-width="1.5"/>
+    <circle cx="600" cy="425" r="22" fill="#d4af37" fill-opacity="0.15" stroke="#d4af37" stroke-width="1.5"/>
+    <text x="600" y="432" fill="#fff8dc" font-size="16" font-weight="900" text-anchor="middle" font-family="sans-serif">مزاج</text>
+    <!-- Premium Reusable Sip Lid -->
+    <path d="M 510,280 C 510,260 690,260 690,280 Z" fill="#2c1a10" stroke="#d4af37" stroke-opacity="0.7" stroke-width="2"/>
+    <rect x="588" y="252" width="24" height="14" rx="4" fill="#d4af37"/>
+  </g>
+
+  <!-- ================= CUP 3: RIGHT (Ceramic Cream White) ================= -->
+  <g filter="url(#shadowCups)">
+    <!-- Cup Body -->
+    <path d="M 750,320 L 770,590 C 770,605 870,605 870,590 L 890,320 Z" fill="url(#cupCream)" stroke="#d4af37" stroke-opacity="0.4" stroke-width="1.5"/>
+    <!-- Cork / Bamboo Eco Sleeve -->
+    <path d="M 760,400 L 765,490 C 765,502 875,502 875,490 L 880,400 Z" fill="#9c754d" stroke="#d4af37" stroke-opacity="0.3" stroke-width="1.5"/>
+    <text x="820" y="455" fill="#2b1809" font-size="11" font-weight="800" text-anchor="middle" font-family="sans-serif" letter-spacing="1">ECO CUP</text>
+    <!-- Lid -->
+    <path d="M 740,320 C 740,305 900,305 900,320 Z" fill="#ded4c5" stroke="#d4af37" stroke-opacity="0.5" stroke-width="2"/>
+    <rect x="810" y="295" width="20" height="12" rx="3" fill="#d4af37" opacity="0.8"/>
+  </g>
+
+  <!-- Roasted Coffee Beans on Counter -->
+  <g fill="#2d170a" stroke="#d4af37" stroke-opacity="0.3" stroke-width="1">
+    <g transform="translate(475, 620) rotate(-20)"><ellipse cx="0" cy="0" rx="18" ry="12"/><path d="M -14,0 Q 0,3 14,0" stroke="#000" stroke-width="2" fill="none"/></g>
+    <g transform="translate(710, 625) rotate(35)"><ellipse cx="0" cy="0" rx="17" ry="11"/><path d="M -13,0 Q 0,2 13,0" stroke="#000" stroke-width="2" fill="none"/></g>
+    <g transform="translate(230, 630) rotate(15)"><ellipse cx="0" cy="0" rx="19" ry="13"/><path d="M -15,0 Q 0,3 15,0" stroke="#000" stroke-width="2" fill="none"/></g>
+    <g transform="translate(970, 620) rotate(-40)"><ellipse cx="0" cy="0" rx="18" ry="12"/><path d="M -14,0 Q 0,2 14,0" stroke="#000" stroke-width="2" fill="none"/></g>
+  </g>
+
+  <!-- Typography & Watermark -->
+  <g font-family="system-ui, -apple-system, sans-serif">
+    <!-- Top Left File Tag -->
+    <rect x="50" y="50" width="310" height="34" rx="17" fill="#050507" fill-opacity="0.85" stroke="#d4af37" stroke-width="1.5"/>
+    <circle cx="70" cy="67" r="5" fill="#d4af37"/>
+    <text x="86" y="72" fill="#fff8dc" font-size="12" font-weight="700" letter-spacing="0.5">Three_reusable_coffee_cups</text>
+
+    <!-- Top Right Session Badge -->
+    <text x="1150" y="72" fill="#d4af37" font-size="14" font-weight="800" text-anchor="end" letter-spacing="2">MAZAJ AL QAHWA // PRODUCTS</text>
+
+    <!-- Bottom Caption -->
+    <text x="50" y="730" fill="#ffffff" font-size="20" font-weight="800">جلسة تصوير مزاج القهوة</text>
+    <text x="50" y="755" fill="#d4af37" font-size="13" font-weight="600" letter-spacing="0.5">Three Contemporary Reusable Artisan Cups • Eco Specialty Merch</text>
+  </g>
+</svg>
