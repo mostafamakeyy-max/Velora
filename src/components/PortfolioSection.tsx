@@ -1,7 +1,9 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { PORTFOLIO_DATA, PortfolioItem } from '../data/contentData';
 import { soundEngine } from '../utils/audioEngine';
-import { Play, Eye, Film, Camera, Sparkles, MapPin, Award, Layers } from 'lucide-react';
+import { getCustomProjects, deleteCustomProject } from '../utils/mediaStore';
+import { UploadMediaModal } from './UploadMediaModal';
+import { Play, Eye, Film, Camera, Sparkles, MapPin, Award, Layers, Plus, Upload, Trash2 } from 'lucide-react';
 
 const FALLBACK_IMAGE = "/assets/coffee/IMG_9546.svg";
 
@@ -15,6 +17,36 @@ type FilterCategory = 'all' | 'cinematic' | 'photography' | 'real_estate' | 'foo
 export const PortfolioSection: React.FC<PortfolioSectionProps> = ({ isArabic, onOpenProject }) => {
   const [activeFilter, setActiveFilter] = useState<FilterCategory>('all');
   const [hoveredVideoId, setHoveredVideoId] = useState<string | null>(null);
+  const [customProjects, setCustomProjects] = useState<PortfolioItem[]>([]);
+  const [isUploadModalOpen, setIsUploadModalOpen] = useState(false);
+
+  // Load custom user-created projects from IndexedDB / localStorage
+  const loadCustomProjects = async () => {
+    try {
+      const items = await getCustomProjects();
+      setCustomProjects(items);
+    } catch (e) {
+      console.warn('Failed loading custom projects:', e);
+    }
+  };
+
+  useEffect(() => {
+    loadCustomProjects();
+  }, []);
+
+  const handleProjectCreated = (newProject: PortfolioItem) => {
+    setCustomProjects((prev) => [newProject, ...prev]);
+    soundEngine.playHapticShutter();
+  };
+
+  const handleDeleteCustomProject = async (e: React.MouseEvent, id: string) => {
+    e.stopPropagation();
+    soundEngine.playMicroClick();
+    if (window.confirm(isArabic ? 'هل تريد بالتأكيد حذف هذا العمل المرفوع؟' : 'Are you sure you want to delete this custom project?')) {
+      await deleteCustomProject(id);
+      setCustomProjects((prev) => prev.filter((p) => p.id !== id));
+    }
+  };
 
   const getPoster = (item: PortfolioItem): string => {
     try {
@@ -51,7 +83,10 @@ export const PortfolioSection: React.FC<PortfolioSectionProps> = ({ isArabic, on
     { id: 'ai_art' as FilterCategory, labelAr: 'إبداع الذكاء الاصطناعي', labelEn: 'AI Concept Art' },
   ];
 
-  const filteredProjects = PORTFOLIO_DATA.filter((item) => {
+  // Merge custom user projects at the top of the portfolio data
+  const combinedProjects = [...customProjects, ...PORTFOLIO_DATA];
+
+  const filteredProjects = combinedProjects.filter((item) => {
     if (activeFilter === 'all') return true;
     return item.category === activeFilter;
   });
@@ -63,7 +98,7 @@ export const PortfolioSection: React.FC<PortfolioSectionProps> = ({ isArabic, on
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         {/* Section Header */}
-        <div className="text-center max-w-3xl mx-auto mb-14 space-y-4">
+        <div className="text-center max-w-3xl mx-auto mb-10 space-y-4">
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#D4AF37]/10 border border-[#D4AF37]/25 text-[#E6CA65] text-xs font-semibold tracking-widest uppercase font-mono">
             <Film className="w-3.5 h-3.5" />
             <span>THE CINEMA ARCHIVE // RIYADH</span>
@@ -89,38 +124,55 @@ export const PortfolioSection: React.FC<PortfolioSectionProps> = ({ isArabic, on
 
           <p className="text-sm sm:text-base text-[#EDE8D0]/70 font-['Cairo',_'Inter']">
             {isArabic
-              ? 'مجموعة مختارة من الإنتاجات البصرية الرائدة لعملائنا في القطاعين الحكومي والخاص بالمملكة.'
-              : 'Curated archive of flagship productions across the Kingdom, setting new standards in digital luxury.'}
+              ? 'مجموعة مختارة من الإنتاجات البصرية الرائدة لعملائنا في القطاعين الحكومي والخاص بالمملكة، مع إمكانية رفع وسائط جديدة مباشرة.'
+              : 'Curated archive of flagship productions across the Kingdom, with real-time media uploading capabilities.'}
           </p>
         </div>
 
-        {/* Filter Pills */}
-        <div className="flex flex-wrap items-center justify-center gap-2 sm:gap-3 mb-14">
-          {filters.map((f) => {
-            const isActive = activeFilter === f.id;
-            return (
-              <button
-                key={f.id}
-                onClick={() => {
-                  soundEngine.playMicroClick();
-                  setActiveFilter(f.id);
-                }}
-                className={`px-4 sm:px-5 py-2 rounded-full text-xs sm:text-sm font-semibold tracking-wide transition-all duration-300 font-['Cairo',_'Inter'] ${
-                  isActive
-                    ? 'bg-gradient-to-r from-[#D4AF37] to-[#E6CA65] text-[#050507] shadow-[0_0_20px_rgba(212,175,55,0.4)] scale-105'
-                    : 'bg-[#0F0F14]/70 border border-[#D4AF37]/20 text-[#EDE8D0]/80 hover:text-white hover:border-[#D4AF37]/50 hover:bg-[#D4AF37]/10'
-                }`}
-              >
-                {isArabic ? f.labelAr : f.labelEn}
-              </button>
-            );
-          })}
+        {/* Upload Action Bar + Filter Pills */}
+        <div className="flex flex-col md:flex-row items-center justify-between gap-4 mb-14">
+          {/* Filter Pills */}
+          <div className="flex flex-wrap items-center justify-center md:justify-start gap-2 sm:gap-3">
+            {filters.map((f) => {
+              const isActive = activeFilter === f.id;
+              return (
+                <button
+                  key={f.id}
+                  onClick={() => {
+                    soundEngine.playMicroClick();
+                    setActiveFilter(f.id);
+                  }}
+                  className={`px-4 sm:px-5 py-2 rounded-full text-xs sm:text-sm font-semibold tracking-wide transition-all duration-300 font-['Cairo',_'Inter'] ${
+                    isActive
+                      ? 'bg-gradient-to-r from-[#D4AF37] to-[#E6CA65] text-[#050507] shadow-[0_0_20px_rgba(212,175,55,0.4)] scale-105'
+                      : 'bg-[#0F0F14]/70 border border-[#D4AF37]/20 text-[#EDE8D0]/80 hover:text-white hover:border-[#D4AF37]/50 hover:bg-[#D4AF37]/10'
+                  }`}
+                >
+                  {isArabic ? f.labelAr : f.labelEn}
+                </button>
+              );
+            })}
+          </div>
+
+          {/* Upload Button */}
+          <button
+            onClick={() => {
+              soundEngine.playMicroClick();
+              setIsUploadModalOpen(true);
+            }}
+            className="group px-5 py-2.5 rounded-full bg-gradient-to-r from-[#D4AF37] to-[#F3E5AB] text-black font-bold text-xs sm:text-sm flex items-center gap-2 shadow-[0_0_25px_rgba(212,175,55,0.35)] hover:shadow-[0_0_35px_rgba(212,175,55,0.6)] hover:scale-105 transition-all flex-shrink-0"
+          >
+            <Plus className="w-4 h-4 transition-transform group-hover:rotate-90 duration-300" />
+            <Upload className="w-4 h-4" />
+            <span>{isArabic ? 'رفع عمل أو وسائط جديدة' : 'Upload Cinema Work'}</span>
+          </button>
         </div>
 
         {/* Masonry / Grid Portfolio Showcase */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
           {filteredProjects.map((item) => {
             const isVideo = item.type === 'video';
+            const isUserProject = customProjects.some((p) => p.id === item.id);
 
             return (
               <div
@@ -181,6 +233,11 @@ export const PortfolioSection: React.FC<PortfolioSectionProps> = ({ isArabic, on
                       <span className="px-3 py-1 rounded-full bg-[#050507]/80 backdrop-blur-md border border-[#D4AF37]/30 text-[11px] font-medium text-[#FFF8DC] tracking-wide">
                         {isArabic ? item.categoryLabelAr : item.categoryLabelEn}
                       </span>
+                      {isUserProject && (
+                        <span className="px-2.5 py-1 rounded-full bg-[#D4AF37]/30 backdrop-blur-md border border-[#D4AF37]/60 text-[#FFF8DC] text-[10px] font-bold">
+                          {isArabic ? 'مرفوع مخصصاً' : 'Custom Upload'}
+                        </span>
+                      )}
                       {getGalleryCount(item) > 1 && (
                         <span className="px-2.5 py-1 rounded-full bg-[#D4AF37]/20 backdrop-blur-md border border-[#D4AF37]/40 text-[#FFF8DC] text-[10px] font-mono flex items-center gap-1">
                           <Layers className="w-3 h-3 text-[#D4AF37]" />
@@ -189,9 +246,21 @@ export const PortfolioSection: React.FC<PortfolioSectionProps> = ({ isArabic, on
                       )}
                     </div>
 
-                    {/* Media Type Icon */}
-                    <div className="w-8 h-8 rounded-full bg-[#050507]/80 backdrop-blur-md border border-white/10 flex items-center justify-center text-[#D4AF37] group-hover:bg-[#D4AF37] group-hover:text-[#050507] transition-all">
-                      {isVideo ? <Play className="w-3.5 h-3.5 fill-current ml-0.5" /> : <Camera className="w-3.5 h-3.5" />}
+                    {/* Media Type Icon & Delete Button if User Upload */}
+                    <div className="flex items-center gap-2">
+                      {isUserProject && (
+                        <button
+                          onClick={(e) => handleDeleteCustomProject(e, item.id)}
+                          className="w-8 h-8 rounded-full bg-black/80 hover:bg-rose-900 border border-white/20 flex items-center justify-center text-white/80 hover:text-white transition-all shadow-md"
+                          title={isArabic ? 'حذف العمل المرفوع' : 'Delete Uploaded Work'}
+                        >
+                          <Trash2 className="w-3.5 h-3.5" />
+                        </button>
+                      )}
+
+                      <div className="w-8 h-8 rounded-full bg-[#050507]/80 backdrop-blur-md border border-white/10 flex items-center justify-center text-[#D4AF37] group-hover:bg-[#D4AF37] group-hover:text-[#050507] transition-all">
+                        {isVideo ? <Play className="w-3.5 h-3.5 fill-current ml-0.5" /> : <Camera className="w-3.5 h-3.5" />}
+                      </div>
                     </div>
                   </div>
 
@@ -240,6 +309,15 @@ export const PortfolioSection: React.FC<PortfolioSectionProps> = ({ isArabic, on
           })}
         </div>
       </div>
+
+      {/* Upload Media Modal */}
+      <UploadMediaModal
+        isOpen={isUploadModalOpen}
+        onClose={() => setIsUploadModalOpen(false)}
+        isArabic={isArabic}
+        onProjectCreated={handleProjectCreated}
+      />
     </section>
   );
 };
+

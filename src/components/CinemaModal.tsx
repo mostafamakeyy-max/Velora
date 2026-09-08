@@ -1,6 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { PortfolioItem, BRAND_INFO } from '../data/contentData';
 import { soundEngine } from '../utils/audioEngine';
+import { registerObjectUrl } from '../utils/mediaStore';
 import {
   X,
   Play,
@@ -11,6 +12,7 @@ import {
   RotateCcw,
   Sparkles,
   Camera,
+  Film,
   Layers,
   MapPin,
   MessageCircle,
@@ -19,7 +21,8 @@ import {
   ChevronRight,
   Upload,
   RefreshCw,
-  Image as ImageIcon
+  Image as ImageIcon,
+  Video
 } from 'lucide-react';
 
 const FALLBACK_PHOTO = "/assets/coffee/IMG_9546.svg";
@@ -38,12 +41,15 @@ export const CinemaModal: React.FC<CinemaModalProps> = ({ item, onClose, isArabi
   const [currentTime, setCurrentTime] = useState(0);
   const [currentPhotoIndex, setCurrentPhotoIndex] = useState(0);
   const [customPhotos, setCustomPhotos] = useState<string[]>([]);
+  const [customVideoUrl, setCustomVideoUrl] = useState<string | null>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const videoInputRef = useRef<HTMLInputElement>(null);
 
   // Load any user-uploaded photos for this project from localStorage
   useEffect(() => {
     setCurrentPhotoIndex(0);
+    setCustomVideoUrl(null);
     if (item?.id) {
       try {
         const stored = localStorage.getItem(`velora_custom_gallery_${item.id}`);
@@ -96,6 +102,27 @@ export const CinemaModal: React.FC<CinemaModalProps> = ({ item, onClose, isArabi
       };
       reader.readAsDataURL(file);
     });
+  };
+
+  const handleCustomVideoUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    soundEngine.playMicroClick();
+    const objectUrl = URL.createObjectURL(file);
+    if (item?.id) {
+      registerObjectUrl(item.id, objectUrl);
+    }
+    setCustomVideoUrl(objectUrl);
+    setIsPlaying(true);
+  };
+
+  const handleResetVideo = () => {
+    soundEngine.playMicroClick();
+    setCustomVideoUrl(null);
+    if (videoInputRef.current) {
+      videoInputRef.current.value = '';
+    }
   };
 
   const handleResetPhotos = () => {
@@ -215,17 +242,57 @@ export const CinemaModal: React.FC<CinemaModalProps> = ({ item, onClose, isArabi
       <div className="relative z-10 w-full max-w-5xl max-h-[92vh] overflow-y-auto rounded-2xl bg-[#0B0B10] border border-[#D4AF37]/30 shadow-[0_25px_80px_rgba(0,0,0,0.95)] flex flex-col">
         {/* Media Player Area */}
         <div className="relative aspect-video w-full bg-black flex items-center justify-center overflow-hidden">
-          {isVideo && item.videoUrl ? (
-            <video
-              ref={videoRef}
-              src={item.videoUrl}
-              autoPlay
-              playsInline
-              onTimeUpdate={handleTimeUpdate}
-              onLoadedMetadata={handleLoadedMetadata}
-              className="w-full h-full object-contain cursor-pointer"
-              onClick={togglePlay}
-            />
+          {isVideo && (customVideoUrl || item.videoUrl) ? (
+            <div className="relative w-full h-full flex items-center justify-center group/video bg-black">
+              <video
+                ref={videoRef}
+                src={customVideoUrl || item.videoUrl}
+                autoPlay
+                playsInline
+                onTimeUpdate={handleTimeUpdate}
+                onLoadedMetadata={handleLoadedMetadata}
+                className="w-full h-full object-contain cursor-pointer"
+                onClick={togglePlay}
+              />
+
+              {/* Video Header Controls: Custom video upload button */}
+              <div className="absolute top-4 inset-x-4 z-20 flex items-center justify-between pointer-events-none">
+                <div className="flex items-center gap-2 pointer-events-auto">
+                  <div className="px-3 py-1.5 rounded-full bg-black/75 backdrop-blur-md border border-[#D4AF37]/40 text-[#FFF8DC] text-xs font-mono flex items-center gap-1.5 shadow-lg">
+                    <Film className="w-3.5 h-3.5 text-[#D4AF37]" />
+                    <span>{customVideoUrl ? (isArabic ? 'فيديو مخصص' : 'Custom Video') : (isArabic ? 'عرض 4K سينمائي' : '4K Cinema Playback')}</span>
+                  </div>
+                </div>
+
+                <div className="flex items-center gap-2 pointer-events-auto">
+                  <label
+                    onClick={() => soundEngine.playMicroClick()}
+                    className="cursor-pointer px-3 py-1.5 rounded-full bg-[#050507]/80 hover:bg-[#D4AF37] text-[#FFF8DC] hover:text-[#050507] backdrop-blur-md border border-[#D4AF37]/40 text-xs font-medium flex items-center gap-1.5 shadow-lg transition-all"
+                    title={isArabic ? "رفع فيديو تجريبي من جهازك" : "Upload custom video from device"}
+                  >
+                    <Upload className="w-3.5 h-3.5" />
+                    <span className="hidden sm:inline">{isArabic ? "رفع فيديو من جهازك" : "Upload Video"}</span>
+                    <input
+                      ref={videoInputRef}
+                      type="file"
+                      accept="video/mp4,video/webm,video/quicktime,video/*"
+                      className="hidden"
+                      onChange={handleCustomVideoUpload}
+                    />
+                  </label>
+
+                  {customVideoUrl && (
+                    <button
+                      onClick={handleResetVideo}
+                      className="p-1.5 rounded-full bg-black/80 hover:bg-rose-900/60 text-white/80 hover:text-white border border-white/20 transition-all backdrop-blur-md shadow-lg"
+                      title={isArabic ? "استعادة الفيديو الأصلي" : "Reset to Original Video"}
+                    >
+                      <RefreshCw className="w-3.5 h-3.5" />
+                    </button>
+                  )}
+                </div>
+              </div>
+            </div>
           ) : (
             <div className="relative w-full h-full flex items-center justify-center group/photo bg-black">
               <img
